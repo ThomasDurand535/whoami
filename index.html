@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Thomas Durand</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+		></script>
+		<style>
+			:root {
+				/* Thème sombre avec gradient */
+				--color-background-primary: linear-gradient(
+					-45deg,
+					#1a1a1a,
+					#2d1a3a,
+					#1a2d3a,
+					#2d2d1a
+				);
+				--color-background-secondary: #2d2d2d;
+				--color-text-primary: #ffffff;
+				--color-text-secondary: #b3b3b3;
+				--color-border: #404040;
+				--color-accent: #64b5f6;
+			}
+
+			body {
+				background: var(--color-background-primary);
+				animation: gradientPulse 5s ease infinite;
+				background-size: 200% 200%;
+				color: var(--color-text-primary);
+				transition:
+					background-color 0.3s ease,
+					color 0.3s ease;
+			}
+
+			@keyframes gradientPulse {
+				0% {
+					background-position: 0% 50%;
+				}
+				50% {
+					background-position: 100% 50%;
+				}
+				100% {
+					background-position: 0% 50%;
+				}
+			}
+
+			.card {
+				background: var(--color-background-secondary);
+				border: 1px solid var(--color-border);
+				transition: all 0.3s ease-in-out;
+			}
+
+			.card:hover {
+				box-shadow:
+					0 10px 15px -3px rgb(0 0 0 / 0.1),
+					0 4px 6px -4px rgb(0 0 0 / 0.1);
+			}
+
+			.text-primary {
+				color: var(--color-text-primary);
+			}
+
+			.text-secondary {
+				color: var(--color-text-secondary);
+			}
+
+			.accent {
+				color: var(--color-accent);
+			}
+
+			.photo-placeholder {
+				background: var(--color-border);
+				border: 3px solid var(--color-accent);
+			}
+
+			.media-placeholder {
+				aspect-ratio: 16/9;
+			}
+		</style>
+	</head>
+	<body class="min-h-screen">
+		<!-- Section Profil -->
+		<section class="container mx-auto px-6 pt-24 max-w-4xl">
+			<div class="text-center">
+				<!-- Photo -->
+				<div class="inline-block mb-8">
+					<img
+						class="photo-placeholder w-40 h-40 rounded-full mx-auto"
+						src="media/IMG_0231.jpg"
+					/>
+				</div>
+
+				<!-- Nom & Prénom -->
+				<h1 class="text-4xl md:text-5xl font-bold text-primary mb-2">
+					Thomas Durand
+				</h1>
+
+				<!-- Métier -->
+				<p class="text-xl md:text-2xl accent font-medium mb-8">
+					Software Engineer
+				</p>
+
+				<!-- Introduction -->
+				<div class="card rounded-2xl p-8 max-w-2xl mx-auto">
+					<p class="text-secondary leading-relaxed">
+						Graduate of ESIEA, I specialize in full stack development. I am
+						looking for a dynamic environment where I can grow technically and
+						contribute to the development or creation of useful solutions.
+					</p>
+					<p class="text-secondary leading-relaxed">
+						I want to continue my career in software engineering while focusing
+						on projects involving DevOps and CI/CD, taking ownership of their
+						implementation and maintenance.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<section
+			class="container mx-auto px-6 py-16 max-w-6xl"
+			x-data="{ activeTab: 'projTab1' }"
+		>
+			<!-- Tabs Navigation -->
+			<div class="flex flex-wrap justify-center gap-3 mb-16">
+				<button
+					@click="activeTab = 'projTab1'"
+					:class="activeTab === 'projTab1' ? 'bg-opacity-100 accent' : 'text-secondary'"
+					class="card px-6 py-3 rounded-full font-medium transition-all hover:scale-105"
+				>
+					Pipiduwa
+				</button>
+				<button
+					@click="activeTab = 'projTab2'"
+					:class="activeTab === 'projTab2' ? 'bg-opacity-100 accent' : 'text-secondary'"
+					class="card px-6 py-3 rounded-full font-medium transition-all hover:scale-105"
+				>
+					Contact
+				</button>
+			</div>
+			<div
+				x-show="activeTab === 'projTab1'"
+				x-transition:enter="transition ease-out duration-300"
+				x-transition:enter-start="opacity-0 transform scale-95"
+				x-transition:enter-end="opacity-100 transform scale-100"
+			>
+				<div class="text-center mb-12">
+					<h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">
+						Pipiduwa
+					</h2>
+					<p class="text-primary max-w-3xl mx-auto font-semibold pt-4">
+						Pipiduwa is a social network dedicated to video games. It lets users
+						follow friends, create and manage lists (for example, to-do or
+						favorites), and search for games to find details such as platform
+						and rating.
+					</p>
+					<p class="text-primary max-w-3xl mx-auto font-semibold pt-4">
+						The name “Pipiduwa” comes from Polish "pipidówa" (pronounced
+						“pipidoova”) and refers to a small, isolated place — fitting for a
+						project that began as a personal solution: a platform to record the
+						games I’ve played, keep track of titles I want to play, and share
+						them with friends.
+					</p>
+					<p class="text-primary max-w-3xl mx-auto font-semibold pt-4">
+						The frontend is built with Vue.js; the API is a RESTful Spring Boot
+						service that supplies data and authenticates users via Keycloak;
+						data is stored in MongoDB and the media are stored in a S3 bucket.
+						The project also includes a scraping service that populates
+						Pipiduwa’s database with information from IGDB and RAWG.
+					</p>
+				</div>
+				<div class="card rounded-2xl overflow-hidden">
+					<div class="media-placeholder">
+						<video
+							class="media-placeholder"
+							autoplay
+							loop
+							src="media/pipiduwa/overview.webm"
+						/>
+					</div>
+					<div class="p-8">
+						<h3 class="text-2xl font-bold text-primary mb-4">Stay tuned!</h3>
+						<p class="text-secondary leading-relaxed mb-6">
+							This project,
+							<strong>AI-Less and with no pre-made component libraries</strong>
+							allows you to research games and users. You can add them to your
+							library, your favorites, or your to-do list. It is far from
+							finished, and many features are coming soon! Here's a recap of the
+							functionalities implemented so far.
+						</p>
+
+						<div class="grid grid-cols-2 gap-4">
+							<div class="">
+								<div
+									class="media-placeholder rounded-lg overflow-hidden"
+									style="aspect-ratio: 16/9"
+								>
+									<img src="media/pipiduwa/profileExmpl.png" />
+								</div>
+								<div class="rounded-lg bg-neutral-700">
+									<p class="text-secondary leading-relaxed my-2 py-2 px-4">
+										Edit your profile, change your name, your profile picture
+										and your biography. Don't mind taking too much storage!
+										These pictures are shrinked then saved in a S3 bucket.
+									</p>
+								</div>
+							</div>
+							<div class="">
+								<div
+									class="media-placeholder rounded-lg overflow-hidden"
+									style="aspect-ratio: 16/9"
+								>
+									<img src="media/pipiduwa/gamedetails.png" />
+								</div>
+								<div class="rounded-lg bg-neutral-700">
+									<p class="text-secondary leading-relaxed my-2 py-2 px-4">
+										Expand the details of a video game to check its description,
+										associated tags, supported platforms, screenshots, and
+										related videos.
+									</p>
+								</div>
+							</div>
+							<div class="">
+								<div
+									class="media-placeholder rounded-lg overflow-hidden"
+									style="aspect-ratio: 16/9"
+								>
+									<video autoplay loop src="media/pipiduwa/research.webm" />
+								</div>
+								<div class="rounded-lg bg-neutral-700">
+									<p class="text-secondary leading-relaxed my-2 py-2 px-4">
+										Easily search for a video game or a user: start with a quick
+										search, and expand the details if you need to apply filters
+										or other options.
+									</p>
+								</div>
+							</div>
+							<div class="">
+								<div
+									class="media-placeholder rounded-lg overflow-hidden"
+									style="aspect-ratio: 16/9"
+								>
+									<img src="media/pipiduwa/otherProfile.png" />
+								</div>
+								<div class="rounded-lg bg-neutral-700">
+									<p class="text-secondary leading-relaxed my-2 py-2 px-4">
+										You can also stalk your friends, you can finally see if they
+										started the game you’ve been begging them to play for the
+										past two years.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div
+				x-show="activeTab === 'projTab2'"
+				x-transition:enter="transition ease-out duration-300"
+				x-transition:enter-start="opacity-0 transform scale-95"
+				x-transition:enter-end="opacity-100 transform scale-100"
+			>
+				<div class="card rounded-2xl overflow-hidden">
+					<div class="p-8">
+						<h3 class="text-2xl font-bold text-primary mb-4">
+							Some more projects will come soon.
+						</h3>
+						<p>
+							If you have any question feel free to write me an e-mail or on
+							LinkedIn.
+						</p>
+						<span class="flex gap-2 align-center pt-2">
+							<img
+								src="media/svg/linkedin-svgrepo-com.svg"
+								class="h-6 w-6 bg-white rounded-md"
+							/>
+							<a
+								class="font-semibold"
+								href="https://www.linkedin.com/in/thomasdurand535/"
+							>
+								thomasdurand535
+							</a>
+						</span>
+						<span class="flex gap-2 align-center pt-2">
+							<img
+								src="media/svg/email-svgrepo-com.svg"
+								class="h-6 w-6 bg-white rounded-md"
+							/>
+							<p class="font-semibold">thomas18802@aol.com</p>
+						</span>
+					</div>
+				</div>
+			</div>
+		</section>
+	</body>
+</html>
