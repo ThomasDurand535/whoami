@@ -9,9 +9,9 @@
 			defer
 			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
 		></script>
+		<script src="https://unpkg.com/lucide@latest"></script>
 		<style>
 			:root {
-				/* Thème sombre avec gradient */
 				--color-background-primary: linear-gradient(
 					-45deg,
 					#1a1a1a,
@@ -80,9 +80,102 @@
 			.media-placeholder {
 				aspect-ratio: 16/9;
 			}
+
+			.media-container {
+				position: relative;
+				z-index: 0;
+			}
+			video {
+				z-index: 0;
+			}
+
+			.expand-overlay {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.6);
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+				z-index: 10;
+			}
+
+			.media-container:hover .expand-overlay {
+				opacity: 1;
+			}
+
+			.fullscreen-modal {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100vw;
+				height: 100vh;
+				background: rgba(0, 0, 0, 0.2);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 9999;
+				padding: 2rem;
+			}
+
+			.fullscreen-modal img,
+			.fullscreen-modal video {
+				max-width: 90%;
+				max-height: 90vh;
+				object-fit: contain;
+			}
+
+			.close-button {
+				position: absolute;
+				top: 2rem;
+				right: 2rem;
+				cursor: pointer;
+				color: white;
+				background: rgba(255, 255, 255, 0.1);
+				padding: 0.5rem;
+				border-radius: 0.5rem;
+				transition: background 0.3s ease;
+			}
+
+			.close-button:hover {
+				background: rgba(255, 255, 255, 0.2);
+			}
 		</style>
 	</head>
-	<body class="min-h-screen">
+	<body
+		class="min-h-screen"
+		x-data="{ fullscreenMedia: null }"
+		@keydown.escape.window="fullscreenMedia = null"
+	>
+		<!-- Fullscreen Modal -->
+		<div
+			x-show="fullscreenMedia"
+			x-transition
+			class="fullscreen-modal"
+			@click="fullscreenMedia = null"
+		>
+			<div class="close-button">
+				<i data-lucide="x" style="width: 32px; height: 32px"></i>
+			</div>
+			<template x-if="fullscreenMedia && fullscreenMedia.endsWith('.webm')">
+				<video
+					:src="fullscreenMedia"
+					autoplay
+					loop
+					controls
+					@click.stop
+				></video>
+			</template>
+			<template x-if="fullscreenMedia && !fullscreenMedia.endsWith('.webm')">
+				<img :src="fullscreenMedia" @click.stop />
+			</template>
+		</div>
+
 		<!-- Section Profil -->
 		<section class="container mx-auto px-6 pt-24 max-w-4xl">
 			<div class="text-center">
@@ -158,10 +251,10 @@
 						and rating.
 					</p>
 					<p class="text-primary max-w-3xl mx-auto font-semibold pt-4">
-						The name “Pipiduwa” comes from Polish "pipidówa" (pronounced
-						“pipidoova”) and refers to a small, isolated place — fitting for a
+						The name "Pipiduwa" comes from Polish "pipidówa" (pronounced
+						"pipidoova") and refers to a small, isolated place — fitting for a
 						project that began as a personal solution: a platform to record the
-						games I’ve played, keep track of titles I want to play, and share
+						games I've played, keep track of titles I want to play, and share
 						them with friends.
 					</p>
 					<p class="text-primary max-w-3xl mx-auto font-semibold pt-4">
@@ -169,17 +262,27 @@
 						service that supplies data and authenticates users via Keycloak;
 						data is stored in MongoDB and the media are stored in a S3 bucket.
 						The project also includes a scraping service that populates
-						Pipiduwa’s database with information from IGDB and RAWG.
+						Pipiduwa's database with information from IGDB and RAWG.
 					</p>
 				</div>
 				<div class="card rounded-2xl overflow-hidden">
-					<div class="media-placeholder">
+					<div
+						class="media-placeholder media-container"
+						@click="fullscreenMedia = 'media/pipiduwa/overview.webm'"
+					>
 						<video
 							class="media-placeholder"
 							autoplay
 							loop
 							src="media/pipiduwa/overview.webm"
 						/>
+						<div class="expand-overlay">
+							<i
+								data-lucide="maximize"
+								class="text-white"
+								style="width: 48px; height: 48px"
+							></i>
+						</div>
 					</div>
 					<div class="p-8">
 						<h3 class="text-2xl font-bold text-primary mb-4">Stay tuned!</h3>
@@ -195,10 +298,18 @@
 						<div class="grid grid-cols-2 gap-4">
 							<div class="">
 								<div
-									class="media-placeholder rounded-lg overflow-hidden"
+									class="media-placeholder rounded-lg overflow-hidden media-container"
 									style="aspect-ratio: 16/9"
+									@click="fullscreenMedia = 'media/pipiduwa/profileExmpl.png'"
 								>
 									<img src="media/pipiduwa/profileExmpl.png" />
+									<div class="expand-overlay">
+										<i
+											data-lucide="maximize"
+											class="text-white"
+											style="width: 48px; height: 48px"
+										></i>
+									</div>
 								</div>
 								<div class="rounded-lg bg-neutral-700">
 									<p class="text-secondary leading-relaxed my-2 py-2 px-4">
@@ -210,10 +321,18 @@
 							</div>
 							<div class="">
 								<div
-									class="media-placeholder rounded-lg overflow-hidden"
+									class="media-placeholder rounded-lg overflow-hidden media-container"
 									style="aspect-ratio: 16/9"
+									@click="fullscreenMedia = 'media/pipiduwa/gamedetails.png'"
 								>
 									<img src="media/pipiduwa/gamedetails.png" />
+									<div class="expand-overlay">
+										<i
+											data-lucide="maximize"
+											class="text-white"
+											style="width: 48px; height: 48px"
+										></i>
+									</div>
 								</div>
 								<div class="rounded-lg bg-neutral-700">
 									<p class="text-secondary leading-relaxed my-2 py-2 px-4">
@@ -225,10 +344,22 @@
 							</div>
 							<div class="">
 								<div
-									class="media-placeholder rounded-lg overflow-hidden"
+									class="media-placeholder rounded-lg overflow-hidden media-container"
 									style="aspect-ratio: 16/9"
+									@click="fullscreenMedia = 'media/pipiduwa/research.webm'"
 								>
-									<video autoplay loop src="media/pipiduwa/research.webm" />
+									<video
+										autoplay
+										loop
+										src="media/pipiduwa/research.webm"
+									></video>
+									<div class="expand-overlay">
+										<i
+											data-lucide="maximize"
+											class="text-white"
+											style="width: 48px; height: 48px"
+										></i>
+									</div>
 								</div>
 								<div class="rounded-lg bg-neutral-700">
 									<p class="text-secondary leading-relaxed my-2 py-2 px-4">
@@ -240,29 +371,45 @@
 							</div>
 							<div class="">
 								<div
-									class="media-placeholder rounded-lg overflow-hidden"
+									class="media-placeholder rounded-lg overflow-hidden media-container"
 									style="aspect-ratio: 16/9"
+									@click="fullscreenMedia = 'media/pipiduwa/otherProfile.png'"
 								>
 									<img src="media/pipiduwa/otherProfile.png" />
+									<div class="expand-overlay">
+										<i
+											data-lucide="maximize"
+											class="text-white"
+											style="width: 48px; height: 48px"
+										></i>
+									</div>
 								</div>
 								<div class="rounded-lg bg-neutral-700">
 									<p class="text-secondary leading-relaxed my-2 py-2 px-4">
 										You can also stalk your friends, you can finally see if they
-										started the game you’ve been begging them to play for the
+										started the game you've been begging them to play for the
 										past two years.
 									</p>
 								</div>
 							</div>
 							<div class="">
 								<div
-									class="media-placeholder rounded-lg overflow-hidden"
+									class="media-placeholder rounded-lg overflow-hidden media-container"
 									style="aspect-ratio: 16/9"
+									@click="fullscreenMedia = 'media/pipiduwa/addToYourLibrary.webm'"
 								>
 									<video
 										autoplay
 										loop
 										src="media/pipiduwa/addToYourLibrary.webm"
-									/>
+									></video>
+									<div class="expand-overlay">
+										<i
+											data-lucide="maximize"
+											class="text-white"
+											style="width: 48px; height: 48px"
+										></i>
+									</div>
 								</div>
 								<div class="rounded-lg bg-neutral-700">
 									<p class="text-secondary leading-relaxed my-2 py-2 px-4">
@@ -313,5 +460,20 @@
 				</div>
 			</div>
 		</section>
+
+		<script>
+			document.addEventListener("alpine:initialized", () => {
+				lucide.createIcons();
+			});
+
+			document.addEventListener("DOMContentLoaded", () => {
+				lucide.createIcons();
+
+				observer.observe(document.body, {
+					childList: true,
+					subtree: true,
+				});
+			});
+		</script>
 	</body>
 </html>
